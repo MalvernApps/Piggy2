@@ -21,9 +21,6 @@ using System.Globalization;
 
 using System.Net;
 
-
-
-
 namespace Piggy2
 {
     /// <summary>
@@ -65,58 +62,25 @@ namespace Piggy2
             {
                 ResultLine rl = new ResultLine();
 
-                //Trace.WriteLine(filename );
+                Trace.WriteLine("###########" + filename );
 
                 using (var pdf = PdfDocument.Open(filename))
                 {
                     foreach (var page in pdf.GetPages())
                     {
-                        var text = ContentOrderTextExtractor.GetText(page);
 
-                        // Or based on grouping letters into words.
-                        var otherText = string.Join(" ", page.GetWords());
-
-                        // Or the raw text of the page's content stream.
-                        var rawText = page.Text;
-
-                        string [] result = text.Split(new[] { '\r', '\n' });                       
-
-                        foreach (string str in result)
+                        try
                         {
-                            if (str.Contains("SW Mercer"))
-                            { 
-                            Trace.WriteLine(str);
-                                rl.FundName = str;
-                            }
-
-                            if (str.StartsWith(@"Fund "))
-                            {
-                                string[] test = str.Split(' ');
-                                if (test.Count() == 6)
-                                {
-                                    Trace.WriteLine(str);
-                                    if (rl.Performance == null)
-                                    {
-                                        string bob = str.Replace("Fund ", "");
-                                        bob = bob.Replace("%", "");
-                                        rl.Performance = bob;
-                                        string[] spl = bob.Split(' ');
-                                     
-
-                                        rl.mon3 = double.Parse(spl[0], CultureInfo.InvariantCulture );
-                                        rl.mon6 = double.Parse(spl[1], CultureInfo.InvariantCulture);
-                                        rl.mon12 = double.Parse(spl[2], CultureInfo.InvariantCulture);
-                                        rl.mon18 = double.Parse(spl[3], CultureInfo.InvariantCulture);
-                                        rl.mon60 = double.Parse(spl[4], CultureInfo.InvariantCulture);
-                                    }
-                                }
-
-                            }
-
+                            getData(rl, page);
                         }
-           
-
+                        catch( Exception ex) 
+                        { 
+                            Trace.WriteLine ( filename + ": " + ex.Message );   
+                        }
                     }
+
+
+
                 }
                 myResults.Add(rl);
             }
@@ -127,6 +91,64 @@ namespace Piggy2
 
 
             }
+
+        private static void getData(ResultLine rl, UglyToad.PdfPig.Content.Page page)
+        {
+            var text = ContentOrderTextExtractor.GetText(page);
+
+            // Or based on grouping letters into words.
+            var otherText = string.Join(" ", page.GetWords());
+
+            // Or the raw text of the page's content stream.
+            var rawText = page.Text;
+
+            string[] result = text.Split(new[] { '\r', '\n' });
+
+            foreach (string str in result)
+            {
+                if (str.Contains("SW Mercer"))
+                {
+                    Trace.WriteLine(str);
+                    rl.FundName = str;
+                }
+
+                if (str.StartsWith(@"Fund "))
+                {
+                    string[] test = str.Split(' ');
+                    if (test.Count() == 6)
+                    {
+                        Trace.WriteLine(str);
+                        if (rl.Performance == null)
+                        {
+                            try
+                            {
+                                string bob = str.Replace("Fund ", "");
+                                bob = bob.Replace("%", "");
+                                rl.Performance = bob;
+                                string[] spl = bob.Split(' ');
+
+                                rl.mon3 = double.Parse(spl[0], CultureInfo.InvariantCulture);
+                                rl.mon6 = double.Parse(spl[1], CultureInfo.InvariantCulture);
+                                rl.mon12 = double.Parse(spl[2], CultureInfo.InvariantCulture);
+                                rl.mon18 = double.Parse(spl[3], CultureInfo.InvariantCulture);
+
+                                // note if the data does not exist we get a '-' so check for it
+                                if (spl[4] != "-")
+                                    rl.mon60 = double.Parse(spl[4], CultureInfo.InvariantCulture);
+                            }
+                            catch( Exception EX)
+                            {
+                                Trace.WriteLine("formatting error caught");
+                            }
+                        }
+                    }
+
+                }
+
+
+
+            }
+        }
 
         public void pdfsV2()
         {
@@ -147,6 +169,8 @@ namespace Piggy2
             WebClient webClient = new WebClient();
             string filename = @"pdfs/myfile" + index + ".pdf" ;
             webClient.DownloadFile(address, filename);
+
+            Trace.WriteLine( "??????????" + filename + address );
         }
     }
 
