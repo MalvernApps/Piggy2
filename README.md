@@ -9,5 +9,6 @@ There may be errors so always double-check on the money4life we site to confirm 
 
 License-free use for QQ pension members and non-commercial usage. Everyone else, please get in touch with me.
 
+24/07/23 - first upload. I plan extra features that I want for me.
 
 SLaTfATf.
