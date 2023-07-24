@@ -31,12 +31,12 @@ namespace Piggy2
         List<ResultLine> myResults = new List<ResultLine>();
         int index = 0;
 
-        // first 5 files on web site - we go get them
-        string d1 = @"https://documents.feprecisionplus.com/factsheet/SWCPZ/FS/05WF_en-GB_Wrap_SWSingleBranded.pdf";
-        string d2 = @"https://documents.feprecisionplus.com/factsheet/SWCPZ/FS/05WE_en-GB_Wrap_SWSingleBranded.pdf";
-        string d3 = @"https://documents.feprecisionplus.com/factsheet/SWCPZ/FS/05WI_en-GB_Wrap_SWSingleBranded.pdf";
-        string d4 = @"https://documents.feprecisionplus.com/factsheet/SWCPZ/FS/05WH_en-GB_Wrap_SWSingleBranded.pdf";
-        string d5 = @"https://documents.feprecisionplus.com/factsheet/SWCPZ/FS/05WN_en-GB_Wrap_SWSingleBranded.pdf";
+        //first 5 files on web site - we go get them
+        //string d1 = @"https://documents.feprecisionplus.com/factsheet/SWCPZ/FS/05WF_en-GB_Wrap_SWSingleBranded.pdf";
+        //string d2 = @"https://documents.feprecisionplus.com/factsheet/SWCPZ/FS/05WE_en-GB_Wrap_SWSingleBranded.pdf";
+        //string d3 = @"https://documents.feprecisionplus.com/factsheet/SWCPZ/FS/05WI_en-GB_Wrap_SWSingleBranded.pdf";
+        //string d4 = @"https://documents.feprecisionplus.com/factsheet/SWCPZ/FS/05WH_en-GB_Wrap_SWSingleBranded.pdf";
+        //string d5 = @"https://documents.feprecisionplus.com/factsheet/SWCPZ/FS/05WN_en-GB_Wrap_SWSingleBranded.pdf";
 
         public MainWindow()
         {
@@ -85,7 +85,7 @@ namespace Piggy2
                 myResults.Add(rl);
             }
 
-            List<ResultLine> SortedList = myResults .OrderBy(o => o.mon3).ToList();
+            List<ResultLine> SortedList = myResults .OrderByDescending(o => o.mon3).ToList();
             myData.ItemsSource = SortedList; 
 
 
@@ -130,7 +130,9 @@ namespace Piggy2
                                 rl.mon3 = double.Parse(spl[0], CultureInfo.InvariantCulture);
                                 rl.mon6 = double.Parse(spl[1], CultureInfo.InvariantCulture);
                                 rl.mon12 = double.Parse(spl[2], CultureInfo.InvariantCulture);
-                                rl.mon18 = double.Parse(spl[3], CultureInfo.InvariantCulture);
+
+                                if (spl[3] != "-")
+                                    rl.mon18 = double.Parse(spl[3], CultureInfo.InvariantCulture);
 
                                 // note if the data does not exist we get a '-' so check for it
                                 if (spl[4] != "-")
