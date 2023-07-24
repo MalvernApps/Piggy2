@@ -1,0 +1,154 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+
+using UglyToad.PdfPig.DocumentLayoutAnalysis.TextExtractor;
+using UglyToad.PdfPig;
+using System.Globalization;
+
+using System.Net;
+
+
+
+
+namespace Piggy2
+{
+    /// <summary>
+    /// Interaction logic for MainWindow.xaml
+    /// </summary>
+    public partial class MainWindow : Window
+    {
+        List<ResultLine> myResults = new List<ResultLine>();
+        int index = 0;
+
+        // first 5 files on web site - we go get them
+        string d1 = @"https://documents.feprecisionplus.com/factsheet/SWCPZ/FS/05WF_en-GB_Wrap_SWSingleBranded.pdf";
+        string d2 = @"https://documents.feprecisionplus.com/factsheet/SWCPZ/FS/05WE_en-GB_Wrap_SWSingleBranded.pdf";
+        string d3 = @"https://documents.feprecisionplus.com/factsheet/SWCPZ/FS/05WI_en-GB_Wrap_SWSingleBranded.pdf";
+        string d4 = @"https://documents.feprecisionplus.com/factsheet/SWCPZ/FS/05WH_en-GB_Wrap_SWSingleBranded.pdf";
+        string d5 = @"https://documents.feprecisionplus.com/factsheet/SWCPZ/FS/05WN_en-GB_Wrap_SWSingleBranded.pdf";
+
+        public MainWindow()
+        {
+            InitializeComponent();
+
+            pdfsV2();
+
+            //GetPDF(d1);
+            //GetPDF(d2);
+            //GetPDF(d3);
+            //GetPDF(d4);
+            //GetPDF(d5);
+
+            doit();
+        }
+
+        private void doit()
+        {
+
+            string[] targets = Directory.GetFiles(@"PDFs");
+
+            foreach (string filename in targets)
+            {
+                ResultLine rl = new ResultLine();
+
+                //Trace.WriteLine(filename );
+
+                using (var pdf = PdfDocument.Open(filename))
+                {
+                    foreach (var page in pdf.GetPages())
+                    {
+                        var text = ContentOrderTextExtractor.GetText(page);
+
+                        // Or based on grouping letters into words.
+                        var otherText = string.Join(" ", page.GetWords());
+
+                        // Or the raw text of the page's content stream.
+                        var rawText = page.Text;
+
+                        string [] result = text.Split(new[] { '\r', '\n' });                       
+
+                        foreach (string str in result)
+                        {
+                            if (str.Contains("SW Mercer"))
+                            { 
+                            Trace.WriteLine(str);
+                                rl.FundName = str;
+                            }
+
+                            if (str.StartsWith(@"Fund "))
+                            {
+                                string[] test = str.Split(' ');
+                                if (test.Count() == 6)
+                                {
+                                    Trace.WriteLine(str);
+                                    if (rl.Performance == null)
+                                    {
+                                        string bob = str.Replace("Fund ", "");
+                                        bob = bob.Replace("%", "");
+                                        rl.Performance = bob;
+                                        string[] spl = bob.Split(' ');
+                                     
+
+                                        rl.mon3 = double.Parse(spl[0], CultureInfo.InvariantCulture );
+                                        rl.mon6 = double.Parse(spl[1], CultureInfo.InvariantCulture);
+                                        rl.mon12 = double.Parse(spl[2], CultureInfo.InvariantCulture);
+                                        rl.mon18 = double.Parse(spl[3], CultureInfo.InvariantCulture);
+                                        rl.mon60 = double.Parse(spl[4], CultureInfo.InvariantCulture);
+                                    }
+                                }
+
+                            }
+
+                        }
+           
+
+                    }
+                }
+                myResults.Add(rl);
+            }
+
+            List<ResultLine> SortedList = myResults .OrderBy(o => o.mon3).ToList();
+            myData.ItemsSource = SortedList; 
+
+
+
+            }
+
+        public void pdfsV2()
+        {
+            var lines = File.ReadAllLines("targets.txt");
+            for (var i = 0; i < lines.Length; i += 1)
+            {
+                var line = lines[i];
+                Trace.WriteLine( line);
+                GetPDF( line  );
+                // Process line
+            }
+
+        }
+
+        public void GetPDF(string address)
+        {
+            index++;
+            WebClient webClient = new WebClient();
+            string filename = @"pdfs/myfile" + index + ".pdf" ;
+            webClient.DownloadFile(address, filename);
+        }
+    }
+
+    
+}
