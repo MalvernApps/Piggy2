@@ -21,6 +21,8 @@ using System.Globalization;
 
 using System.Net;
 using System.Security.Policy;
+using System.ComponentModel;
+using System.Reflection;
 
 namespace Piggy2
 {
@@ -133,7 +135,7 @@ namespace Piggy2
                                 rl.mon12 = double.Parse(spl[2], CultureInfo.InvariantCulture);
 
                                 if (spl[3] != "-")
-                                    rl.mon18 = double.Parse(spl[3], CultureInfo.InvariantCulture);
+                                    rl.Month18 = double.Parse(spl[3], CultureInfo.InvariantCulture);
 
                                 // note if the data does not exist we get a '-' so check for it
                                 if (spl[4] != "-")
@@ -219,6 +221,53 @@ namespace Piggy2
         {
             Process.Start("chrome.exe", url);
            
+        }
+
+        private void OnAutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
+        {
+            var displayName = GetPropertyDisplayName(e.PropertyDescriptor);
+
+            if (!string.IsNullOrEmpty(displayName))
+            {
+                e.Column.Header = displayName;
+            }
+        }       
+
+        public static string GetPropertyDisplayName(object descriptor)
+        {
+            var pd = descriptor as PropertyDescriptor;
+
+            if (pd != null)
+            {
+                // Check for DisplayName attribute and set the column header accordingly
+                var displayName = pd.Attributes[typeof(DisplayNameAttribute)] as DisplayNameAttribute;
+
+                if (displayName != null && displayName != DisplayNameAttribute.Default)
+                {
+                    return displayName.DisplayName;
+                }
+
+            }
+            else
+            {
+                var pi = descriptor as PropertyInfo;
+
+                if (pi != null)
+                {
+                    // Check for DisplayName attribute and set the column header accordingly
+                    Object[] attributes = pi.GetCustomAttributes(typeof(DisplayNameAttribute), true);
+                    for (int i = 0; i < attributes.Length; ++i)
+                    {
+                        var displayName = attributes[i] as DisplayNameAttribute;
+                        if (displayName != null && displayName != DisplayNameAttribute.Default)
+                        {
+                            return displayName.DisplayName;
+                        }
+                    }
+                }
+            }
+
+            return null;
         }
     }
 }
