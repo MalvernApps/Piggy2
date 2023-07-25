@@ -125,6 +125,7 @@
     <Resource Include="Images\download.png" />
     <Resource Include="Images\pdf_files.png" />
     <Resource Include="Images\calculator.png" />
+    <Resource Include="Images\Example 002.png" />
     <Content Include="targets.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
