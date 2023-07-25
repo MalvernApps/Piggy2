@@ -274,5 +274,10 @@ namespace Piggy2
 
             return null;
         }
+
+        private void menuHome(object sender, RoutedEventArgs e)
+        {
+            GoToSite(@"https://money4life.scottishwidows.co.uk/");
+        }
     }
 }
