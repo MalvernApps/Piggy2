@@ -96,7 +96,6 @@ namespace Piggy2
         private static void getData(ResultLine rl, UglyToad.PdfPig.Content.Page page)
         {
             var text = ContentOrderTextExtractor.GetText(page);
-            int x = 0;
 
             // Or based on grouping letters into words.
             var otherText = string.Join(" ", page.GetWords());
@@ -140,9 +139,9 @@ namespace Piggy2
                                 if (spl[4] != "-")
                                     rl.mon60 = double.Parse(spl[4], CultureInfo.InvariantCulture);
                             }
-                            catch( Exception EX)
+                            catch( Exception ex)
                             {
-                                Trace.WriteLine("formatting error caught");
+                                Trace.WriteLine("formatting error caught: " + ex.Message);
                             }
                         }
                     }
