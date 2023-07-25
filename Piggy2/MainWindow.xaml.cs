@@ -150,6 +150,17 @@ namespace Piggy2
             }
         }
 
+        public void ConfigureList()
+        {
+            var lines = File.ReadAllLines("targets.txt");
+            for (var i = 0; i < lines.Length; i += 1)
+            {
+                var line = lines[i];
+                alllinks.Add(line);              
+            }
+
+        }
+
         public void pdfsV2()
         {
             var lines = File.ReadAllLines("targets.txt");
@@ -194,6 +205,7 @@ namespace Piggy2
 
         private void menuProcess(object sender, RoutedEventArgs e)
         {
+            ConfigureList();
             doit();
         }
 
