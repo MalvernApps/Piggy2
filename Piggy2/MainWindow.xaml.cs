@@ -40,17 +40,7 @@ namespace Piggy2
 
         public MainWindow()
         {
-            InitializeComponent();
-
-            pdfsV2();
-
-            //GetPDF(d1);
-            //GetPDF(d2);
-            //GetPDF(d3);
-            //GetPDF(d4);
-            //GetPDF(d5);
-
-            doit();
+            InitializeComponent();         
         }
 
         private void doit()
@@ -146,9 +136,6 @@ namespace Piggy2
                     }
 
                 }
-
-
-
             }
         }
 
@@ -174,7 +161,16 @@ namespace Piggy2
 
             Trace.WriteLine( "??????????" + filename + address );
         }
-    }
 
-    
+        /// <summary>
+        /// download the files
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void menuDownload(object sender, RoutedEventArgs e)
+        {
+            pdfsV2();
+            doit();
+        }
+    }
 }
