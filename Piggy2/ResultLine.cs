@@ -12,7 +12,7 @@ namespace Piggy2
 {
     class ResultLine
     {
-        [DisplayName("Fund NaME")]
+        [DisplayName("Fund Name")]
         public string FundName { get; set; }
 
         public string Performance;
