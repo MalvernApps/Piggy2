@@ -21,5 +21,7 @@ namespace Piggy2
         public double mon18 { get; set; }
 
         public double mon60 { get; set; }
+
+        public string download_Link { get; set; }
     }
 }

@@ -20,6 +20,7 @@ using UglyToad.PdfPig;
 using System.Globalization;
 
 using System.Net;
+using System.Security.Policy;
 
 namespace Piggy2
 {
@@ -29,6 +30,8 @@ namespace Piggy2
     public partial class MainWindow : Window
     {
         List<ResultLine> myResults = new List<ResultLine>();
+        List<string> alllinks = new List<string>();
+
         int index = 0;
 
         //first 5 files on web site - we go get them
@@ -45,14 +48,22 @@ namespace Piggy2
 
         private void doit()
         {
+           // string[] targets = Directory.GetFiles(@"PDFs");
 
-            string[] targets = Directory.GetFiles(@"PDFs");
+            var targets = Directory.GetFiles("PDFs").OrderBy(f => f);
 
             foreach (string filename in targets)
             {
                 ResultLine rl = new ResultLine();
 
+                string[] decoded = filename.Split('_');
+                string[] spl = decoded[1].Split('.');
+
+                int index = int.Parse(spl[0]);
+                string u = alllinks[index - 1];
+
                 Trace.WriteLine("###########" + filename );
+                rl.download_Link = u;   
 
                 using (var pdf = PdfDocument.Open(filename))
                 {
@@ -85,6 +96,7 @@ namespace Piggy2
         private static void getData(ResultLine rl, UglyToad.PdfPig.Content.Page page)
         {
             var text = ContentOrderTextExtractor.GetText(page);
+            int x = 0;
 
             // Or based on grouping letters into words.
             var otherText = string.Join(" ", page.GetWords());
@@ -145,6 +157,7 @@ namespace Piggy2
             for (var i = 0; i < lines.Length; i += 1)
             {
                 var line = lines[i];
+                alllinks.Add(line);
                 Trace.WriteLine( line);
                 GetPDF( line  );
                 // Process line
@@ -156,7 +169,7 @@ namespace Piggy2
         {
             index++;
             WebClient webClient = new WebClient();
-            string filename = @"pdfs/myfile" + index + ".pdf" ;
+            string filename = @"pdfs/myfile_" + index + ".pdf" ;
             webClient.DownloadFile(address, filename);
 
             Trace.WriteLine( "??????????" + filename + address );
@@ -170,7 +183,31 @@ namespace Piggy2
         private void menuDownload(object sender, RoutedEventArgs e)
         {
             pdfsV2();
+           
+        }
+
+        private void menuViewPdfs(object sender, RoutedEventArgs e)
+        {
+            Process.Start("explorer.exe", @".\PDFs");
+        }
+
+    
+
+        private void menuProcess(object sender, RoutedEventArgs e)
+        {
             doit();
+        }
+
+        private void openURL(object sender, MouseButtonEventArgs e)
+        {
+            ResultLine rl = (ResultLine)myData.SelectedItem;
+    GoToSite( rl.download_Link);
+        }
+
+        public static void GoToSite(string url)
+        {
+            Process.Start("chrome.exe", url);
+           
         }
     }
 }

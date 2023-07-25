@@ -123,6 +123,8 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\download.png" />
+    <Resource Include="Images\pdf_files.png" />
+    <Resource Include="Images\calculator.png" />
     <Content Include="targets.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
