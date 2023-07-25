@@ -23,6 +23,7 @@ using System.Net;
 using System.Security.Policy;
 using System.ComponentModel;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace Piggy2
 {
@@ -171,6 +172,7 @@ namespace Piggy2
                 var line = lines[i];
                 alllinks.Add(line);
                 Trace.WriteLine( line);
+                status.Content = line;  
                 GetPDF( line  );
                 // Process line
             }
@@ -195,6 +197,8 @@ namespace Piggy2
         private void menuDownload(object sender, RoutedEventArgs e)
         {
             pdfsV2();
+
+            MessageBox.Show("Downloading Finished", "Information", MessageBoxButton.OK, MessageBoxImage.Information );
            
         }
 
@@ -279,5 +283,36 @@ namespace Piggy2
         {
             GoToSite(@"https://money4life.scottishwidows.co.uk/");
         }
+
+
+        /// <summary>
+        /// https://stackoverflow.com/questions/1288718/how-to-delete-all-files-and-folders-in-a-directory
+        /// </summary>
+        private void DeleteAllpdfs()
+        {
+            System.IO.DirectoryInfo di = new DirectoryInfo("PDFs");
+
+            foreach (FileInfo file in di.GetFiles())
+            {
+                file.Delete();
+            }
+
+        }
+        /// <summary>
+        /// delete all pdfs downloads
+        ///  https://stackoverflow.com/questions/1288718/how-to-delete-all-files-and-folders-in-a-directory
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void menuDeletePdfs(object sender, RoutedEventArgs e)
+        {
+            DeleteAllpdfs();
+            MessageBox.Show("Deletion Finished", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        //private void menuViewPdfs(object sender, RoutedEventArgs e)
+        //{
+        //    Process.Start("explorer.exe", @".\PDFs");
+        //}
     }
 }
