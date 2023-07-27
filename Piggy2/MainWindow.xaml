@@ -8,7 +8,7 @@
         Title="QinetiQ Pension DC Downloader" Height="900" Width="1000">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="160"/>
+            <RowDefinition Height="135"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition></RowDefinition>
             <RowDefinition Height="30"></RowDefinition>
@@ -16,8 +16,7 @@
 
         <DataGrid x:Name="myData" Grid.Row="1" Height="670" MouseDoubleClick="openURL"  AlternationCount="2" AlternatingRowBackground="LightBlue" AutoGenerateColumns="True" AutoGeneratingColumn="OnAutoGeneratingColumn" VerticalScrollBarVisibility="Visible"></DataGrid>
 
-        <Ribbon x:Name="RibbonWin"  SelectedIndex="0" Margin="0,10
-                ,0,0">
+        <Ribbon x:Name="RibbonWin"  SelectedIndex="0" Margin="0,0,0,0">
 
             <RibbonTab Header="File">
                 <RibbonGroup Header="Control">
@@ -25,7 +24,7 @@
                     <RibbonButton LargeImageSource="Images\download.png" Label="Download Performance PDFs" KeyTip="D" Click="menuDownload"/>
                     <RibbonButton LargeImageSource="Images\calculator.png" Label="Process PDFs" KeyTip="D" Click="menuProcess"/>
                     <RibbonButton LargeImageSource="Images\delete.png" Label="Delete All PDFs" KeyTip="D" Click="menuDeletePdfs"/>
-                    <RibbonButton LargeImageSource="Images\pdf_files.png" Label="View PDFs" KeyTip="D" Click="menuViewPdfs"/>
+                    <RibbonButton LargeImageSource="Images\pdf_files.png" Label="View downloaded PDFs" KeyTip="D" Click="menuViewPdfs"/>
                 </RibbonGroup>
                
             </RibbonTab>

@@ -129,6 +129,9 @@
     <Resource Include="Images\Example 002.png" />
     <Resource Include="Images\home.png" />
     <Resource Include="Images\delete.png" />
+    <Resource Include="MyFunds.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
     <Content Include="targets.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
