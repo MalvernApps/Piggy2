@@ -37,18 +37,14 @@ namespace Piggy2
 
         int index = 0;
 
-        //first 5 files on web site - we go get them
-        //string d1 = @"https://documents.feprecisionplus.com/factsheet/SWCPZ/FS/05WF_en-GB_Wrap_SWSingleBranded.pdf";
-        //string d2 = @"https://documents.feprecisionplus.com/factsheet/SWCPZ/FS/05WE_en-GB_Wrap_SWSingleBranded.pdf";
-        //string d3 = @"https://documents.feprecisionplus.com/factsheet/SWCPZ/FS/05WI_en-GB_Wrap_SWSingleBranded.pdf";
-        //string d4 = @"https://documents.feprecisionplus.com/factsheet/SWCPZ/FS/05WH_en-GB_Wrap_SWSingleBranded.pdf";
-        //string d5 = @"https://documents.feprecisionplus.com/factsheet/SWCPZ/FS/05WN_en-GB_Wrap_SWSingleBranded.pdf";
-
+        string AllPDFFiles = "targets2.txt";
+    
         public MainWindow()
         {
             InitializeComponent();
 
             CreateDir();
+            GetAListOfMine();
         }
 
         private void CreateDir()
@@ -59,10 +55,27 @@ namespace Piggy2
             }
         }
 
+        public bool TestMyList( string input )
+        {
+            bool res;
+            foreach( string str in myFunds )
+            {
+                res = input.Contains( str );
+                Trace.WriteLine( str );
+                Trace.WriteLine(input);
+                Trace.WriteLine(res);
+
+                if (res == true) 
+                    return true;
+                 
+            }
+
+            return false;
+
+        }
+
         private void doit()
         {
-           // string[] targets = Directory.GetFiles(@"PDFs");
-
             var targets = Directory.GetFiles("PDFs").OrderBy(f => f);
 
             foreach (string filename in targets)
@@ -76,7 +89,9 @@ namespace Piggy2
                 string u = alllinks[index - 1];
 
                 Trace.WriteLine("###########" + filename );
-                rl.download_Link = u;   
+                rl.download_Link = u;  
+                
+                rl.IsMine = TestMyList( u );
 
                 using (var pdf = PdfDocument.Open(filename))
                 {
@@ -206,7 +221,7 @@ namespace Piggy2
         /// <param name="e"></param>
         private void menuDownload(object sender, RoutedEventArgs e)
         {
-            pdfsV2("targets.txt");
+            pdfsV2(AllPDFFiles);
 
             MessageBox.Show("Downloading Finished", "Information", MessageBoxButton.OK, MessageBoxImage.Information );
            
@@ -221,7 +236,7 @@ namespace Piggy2
 
         private void menuProcess(object sender, RoutedEventArgs e)
         {
-            ConfigureList("targets.txt");
+            ConfigureList(AllPDFFiles);
             doit();
         }
 
@@ -329,6 +344,20 @@ namespace Piggy2
         {
             ConfigureList("MyFunds.txt");
             doit();
+        }
+
+        // a list containing all my funds
+        List<string>  myFunds = new List<string>();
+
+        public void GetAListOfMine()
+        {
+            var lines = File.ReadAllLines("MyFunds.txt");
+            for (var i = 0; i < lines.Length; i += 1)
+            {
+                var line = lines[i];
+                myFunds.Add(line);
+            }
+
         }
     }
 }

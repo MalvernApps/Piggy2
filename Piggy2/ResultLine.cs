@@ -32,7 +32,15 @@ namespace Piggy2
         [DisplayName("5 Year %")]
         public double mon60 { get; set; }
 
+        public bool IsMine { get; set; }
+
         [DisplayName("pdf download link")]
         public string download_Link { get; set; }
+    
+
+        public ResultLine()
+        {
+            IsMine = false;
+        }
     }
 }
