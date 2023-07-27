@@ -22,7 +22,9 @@
                 <RibbonGroup Header="Control">
                     <RibbonButton LargeImageSource="Images\home.png" Label="Money4Life website" KeyTip="D" Click="menuHome"/>
                     <RibbonButton LargeImageSource="Images\download.png" Label="Download Performance PDFs" KeyTip="D" Click="menuDownload"/>
+                    <RibbonButton LargeImageSource="Images\download.png" Label="Download My PDFs" KeyTip="D" Click="menuDownloadMine"/>
                     <RibbonButton LargeImageSource="Images\calculator.png" Label="Process PDFs" KeyTip="D" Click="menuProcess"/>
+                    <RibbonButton LargeImageSource="Images\calculator.png" Label="Process My PDFs" KeyTip="D" Click="menuProcessMine"/>
                     <RibbonButton LargeImageSource="Images\delete.png" Label="Delete All PDFs" KeyTip="D" Click="menuDeletePdfs"/>
                     <RibbonButton LargeImageSource="Images\pdf_files.png" Label="View downloaded PDFs" KeyTip="D" Click="menuViewPdfs"/>
                 </RibbonGroup>

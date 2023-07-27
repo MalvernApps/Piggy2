@@ -163,9 +163,9 @@ namespace Piggy2
             }
         }
 
-        public void ConfigureList()
+        public void ConfigureList(string filename)
         {
-            var lines = File.ReadAllLines("targets.txt");
+            var lines = File.ReadAllLines(filename);
             for (var i = 0; i < lines.Length; i += 1)
             {
                 var line = lines[i];
@@ -174,9 +174,9 @@ namespace Piggy2
 
         }
 
-        public void pdfsV2()
+        public void pdfsV2( string filename)
         {
-            var lines = File.ReadAllLines("targets.txt");
+            var lines = File.ReadAllLines(filename);
             for (var i = 0; i < lines.Length; i += 1)
             {
                 var line = lines[i];
@@ -206,7 +206,7 @@ namespace Piggy2
         /// <param name="e"></param>
         private void menuDownload(object sender, RoutedEventArgs e)
         {
-            pdfsV2();
+            pdfsV2("targets.txt");
 
             MessageBox.Show("Downloading Finished", "Information", MessageBoxButton.OK, MessageBoxImage.Information );
            
@@ -221,7 +221,7 @@ namespace Piggy2
 
         private void menuProcess(object sender, RoutedEventArgs e)
         {
-            ConfigureList();
+            ConfigureList("targets.txt");
             doit();
         }
 
@@ -320,9 +320,15 @@ namespace Piggy2
             MessageBox.Show("Deletion Finished", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
-        //private void menuViewPdfs(object sender, RoutedEventArgs e)
-        //{
-        //    Process.Start("explorer.exe", @".\PDFs");
-        //}
+        private void menuDownloadMine(object sender, RoutedEventArgs e)
+        {
+            pdfsV2("MyFunds.txt");
+        }
+
+        private void menuProcessMine(object sender, RoutedEventArgs e)
+        {
+            ConfigureList("MyFunds.txt");
+            doit();
+        }
     }
 }
