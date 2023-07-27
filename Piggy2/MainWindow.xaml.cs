@@ -46,7 +46,17 @@ namespace Piggy2
 
         public MainWindow()
         {
-            InitializeComponent();         
+            InitializeComponent();
+
+            CreateDir();
+        }
+
+        private void CreateDir()
+        {
+            if ( !Directory.Exists(@".\PDFs"))
+            {
+                Directory.CreateDirectory(@".\PDFs");
+            }
         }
 
         private void doit()
@@ -218,7 +228,7 @@ namespace Piggy2
         private void openURL(object sender, MouseButtonEventArgs e)
         {
             ResultLine rl = (ResultLine)myData.SelectedItem;
-    GoToSite( rl.download_Link);
+            GoToSite( rl.download_Link);
         }
 
         public static void GoToSite(string url)
